@@ -1,4 +1,5 @@
 import listsWishes from '../data/listWishes';
+import * as firebase from 'firebase';
 
 // export const GET_WISHES = 'GET_WISHES';
 export const START_LOAD_WISHES = 'START_LOAD_WISHES';
@@ -12,7 +13,28 @@ export const SAVE_WISH = 'SAVE_WISH';
 //   };
 // }
 export function fetchWishes() {
-  return (dispatch) => {
+  return async (dispatch) => {
+    const db = firebase.firestore();
+    console.log(db);
+    let list = await db.collection('list').get();
+    console.log(list);
+    list.forEach(doc => {
+      console.log(doc.id, '=>', doc.data().name);
+    });
+
+    //   .then((item) => {
+    //     item.forEach((i) => {
+    //       console.log(i);
+    //     });
+    //     item.forEach((doc) => {
+    //       console.log(doc.id, '=>', doc.data());
+    //     });
+    //   });
+    // db.collection("list").doc("ruAxDnbN6RITcoM0Vw3d")
+    //   .onSnapshot(function(doc) {
+    //     console.log("Current data: ", doc.data());
+    //   });
+    console.log(list);
     dispatch(startLoadWishes());
     setTimeout(() => dispatch(finishLoadWishes()), 2000);
   }
